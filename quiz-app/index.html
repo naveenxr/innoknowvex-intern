@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Interactive Quiz App — test your JavaScript knowledge with multiple-choice questions, a live timer, and a final score."/>
+  <title>QuizMaster — Interactive Quiz App</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body id="body">
+
+  <!-- Ambient background -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 1 — WELCOME
+  ══════════════════════════════════════ -->
+  <div class="screen active" id="screenWelcome">
+    <div class="card welcome-card">
+      <div class="quiz-badge">📚 Quiz Challenge</div>
+      <h1 class="welcome-title">QuizMaster</h1>
+      <p class="welcome-sub">Test your JavaScript & Web Dev knowledge.<br/>10 questions · 20 seconds each</p>
+      <div class="welcome-stats">
+        <div class="w-stat"><span class="w-stat-val">10</span><span class="w-stat-lab">Questions</span></div>
+        <div class="w-stat-div"></div>
+        <div class="w-stat"><span class="w-stat-val">20s</span><span class="w-stat-lab">Per Question</span></div>
+        <div class="w-stat-div"></div>
+        <div class="w-stat"><span class="w-stat-val">4</span><span class="w-stat-lab">Options</span></div>
+      </div>
+      <button class="btn-primary" id="startBtn">Start Quiz <span class="btn-arrow">→</span></button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 2 — QUESTION
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screenQuestion">
+    <div class="card question-card">
+
+      <!-- Header: progress + timer -->
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-number" id="qNumber">Question 1/10</span>
+          <span class="q-category" id="qCategory">JavaScript</span>
+        </div>
+        <div class="timer-wrap">
+          <svg class="timer-ring" viewBox="0 0 44 44">
+            <circle class="ring-bg" cx="22" cy="22" r="18"/>
+            <circle class="ring-fill" id="timerRing" cx="22" cy="22" r="18"
+              stroke-dasharray="113.1"
+              stroke-dashoffset="0"/>
+          </svg>
+          <span class="timer-num" id="timerNum">20</span>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill" style="width:10%"></div>
+      </div>
+
+      <!-- Question text -->
+      <p class="question-text" id="questionText">Loading…</p>
+
+      <!-- Options -->
+      <div class="options-grid" id="optionsGrid">
+        <button class="option-btn" id="opt-0"></button>
+        <button class="option-btn" id="opt-1"></button>
+        <button class="option-btn" id="opt-2"></button>
+        <button class="option-btn" id="opt-3"></button>
+      </div>
+
+      <!-- Next button (hidden until answered) -->
+      <button class="btn-next" id="nextBtn" style="display:none">
+        Next <span>→</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 3 — RESULTS
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screenResult">
+    <div class="card result-card">
+
+      <div class="result-emoji" id="resultEmoji">🏆</div>
+      <h2 class="result-title" id="resultTitle">Excellent!</h2>
+      <p class="result-sub"  id="resultSub">You really know your stuff.</p>
+
+      <!-- Score ring -->
+      <div class="score-ring-wrap">
+        <svg class="score-ring" viewBox="0 0 120 120">
+          <circle class="sr-bg"   cx="60" cy="60" r="52"/>
+          <circle class="sr-fill" id="scoreRingFill" cx="60" cy="60" r="52"
+            stroke-dasharray="326.7"
+            stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="score-inner">
+          <span class="score-num" id="scoreNum">0</span>
+          <span class="score-label">/ 10</span>
+        </div>
+      </div>
+
+      <!-- Stat breakdown -->
+      <div class="result-stats">
+        <div class="rs-item correct">
+          <span class="rs-icon">✅</span>
+          <span class="rs-val" id="rsCorrect">0</span>
+          <span class="rs-lab">Correct</span>
+        </div>
+        <div class="rs-item wrong">
+          <span class="rs-icon">❌</span>
+          <span class="rs-val" id="rsWrong">0</span>
+          <span class="rs-lab">Wrong</span>
+        </div>
+        <div class="rs-item skip">
+          <span class="rs-icon">⏱️</span>
+          <span class="rs-val" id="rsSkip">0</span>
+          <span class="rs-lab">Timed Out</span>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-primary" id="retryBtn">Try Again 🔄</button>
+        <button class="btn-secondary" id="reviewBtn">Review Answers 📋</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 4 — REVIEW
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screenReview">
+    <div class="card review-card">
+      <h2 class="review-title">📋 Answer Review</h2>
+      <div class="review-list" id="reviewList"></div>
+      <button class="btn-primary" id="backBtn">← Back to Results</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

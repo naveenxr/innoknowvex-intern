@@ -1,0 +1,398 @@
+/* ================================
+   ANIMATED DIGITAL CLOCK - STYLES
+   ================================ */
+
+/* Google Fonts: Orbitron (digital) + Inter (UI) */
+
+/* ── CSS Variables ── */
+:root {
+  /* Dark Mode (default) */
+  --bg-primary: #0a0a1a;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-digit: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(99, 102, 241, 0.35);
+  --glow-color: #6366f1;
+  --glow-soft: rgba(99, 102, 241, 0.2);
+  --text-primary: #e8e8ff;
+  --text-secondary: rgba(200, 200, 255, 0.55);
+  --digit-color: #c7d2fe;
+  --colon-color: #818cf8;
+  --label-color: rgba(165, 180, 252, 0.5);
+  --badge-bg: linear-gradient(135deg, #6366f1, #a855f7);
+  --progress-bg: rgba(99, 102, 241, 0.12);
+  --progress-fill: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+  --particle-color: #6366f1;
+  --shadow-card: 0 0 60px rgba(99, 102, 241, 0.18), 0 0 120px rgba(99, 102, 241, 0.07);
+}
+
+body.light {
+  --bg-primary: #f0f0ff;
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-digit: rgba(99, 102, 241, 0.07);
+  --border-color: rgba(99, 102, 241, 0.25);
+  --glow-color: #4f46e5;
+  --glow-soft: rgba(99, 102, 241, 0.12);
+  --text-primary: #1e1b4b;
+  --text-secondary: rgba(79, 70, 229, 0.6);
+  --digit-color: #3730a3;
+  --colon-color: #6366f1;
+  --label-color: rgba(99, 102, 241, 0.5);
+  --badge-bg: linear-gradient(135deg, #4f46e5, #7c3aed);
+  --progress-bg: rgba(99, 102, 241, 0.1);
+  --progress-fill: linear-gradient(90deg, #4f46e5, #7c3aed, #db2777);
+  --particle-color: #818cf8;
+  --shadow-card: 0 20px 60px rgba(99, 102, 241, 0.14), 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: background 0.5s ease, color 0.5s ease;
+  position: relative;
+}
+
+/* Dark mode radial glow background */
+body.dark::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.light::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(168, 85, 247, 0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Particles ── */
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--particle-color);
+  opacity: 0;
+  animation: float-particle var(--dur) ease-in-out infinite var(--delay);
+}
+
+@keyframes float-particle {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(-20px) scale(1); opacity: 0; }
+}
+
+/* ── Theme Toggle Button ── */
+.theme-toggle {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 100;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease;
+  box-shadow: 0 4px 20px var(--glow-soft);
+}
+
+.theme-toggle:hover {
+  transform: rotate(20deg) scale(1.1);
+  box-shadow: 0 0 20px var(--glow-soft), 0 4px 30px rgba(0,0,0,0.2);
+}
+
+/* ── Clock Wrapper Card ── */
+.clock-wrapper {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 52px 64px 44px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 32px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--shadow-card);
+  animation: card-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+  max-width: 720px;
+  width: 90vw;
+}
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Greeting ── */
+.greeting {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  animation: fade-down 0.6s 0.2s both;
+  transition: color 0.5s ease;
+}
+
+/* ── Date ── */
+.date-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  animation: fade-down 0.6s 0.3s both;
+}
+
+.date-day {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  transition: color 0.5s ease;
+}
+
+.date-sep {
+  color: var(--border-color);
+  font-size: 1.1rem;
+}
+
+.date-full {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  transition: color 0.5s ease;
+}
+
+/* ── Clock Face ── */
+.clock-face {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  animation: fade-up 0.7s 0.35s both;
+}
+
+/* ── Time Block ── */
+.time-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.digit-display {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: clamp(3.8rem, 10vw, 7rem);
+  letter-spacing: 0.04em;
+  color: var(--digit-color);
+  background: var(--bg-digit);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 18px 28px;
+  min-width: 160px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* Reflective glare effect */
+.digit-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 50%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Second block flicker when updating */
+#secBlock .digit-display {
+  animation: none;
+}
+
+#secBlock.tick .digit-display {
+  animation: pulse-glow 0.25s ease-out;
+}
+
+@keyframes pulse-glow {
+  0%   { box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 30px rgba(0,0,0,0.2), 0 0 30px var(--glow-soft); }
+  50%  { box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 30px rgba(0,0,0,0.2), 0 0 60px var(--glow-color), 0 0 100px var(--glow-soft); }
+  100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 30px rgba(0,0,0,0.2), 0 0 30px var(--glow-soft); }
+}
+
+.label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--label-color);
+  transition: color 0.5s ease;
+}
+
+/* ── Colon Separator ── */
+.colon-separator {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-bottom: 34px;
+}
+
+.colon {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: clamp(3.8rem, 10vw, 7rem);
+  color: var(--colon-color);
+  line-height: 1;
+  padding: 0 4px;
+  animation: blink 1s step-start infinite;
+  transition: color 0.5s ease;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+
+/* ── AM/PM Badge ── */
+.ampm-container {
+  margin-top: 24px;
+  animation: fade-up 0.6s 0.5s both;
+}
+
+.ampm-badge {
+  display: inline-block;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  padding: 6px 18px;
+  border-radius: 50px;
+  background: var(--badge-bg);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  transition: background 0.5s ease;
+}
+
+/* ── Progress Bar ── */
+.progress-container {
+  margin-top: 30px;
+  height: 4px;
+  background: var(--progress-bg);
+  border-radius: 999px;
+  overflow: hidden;
+  animation: fade-up 0.6s 0.6s both;
+  transition: background 0.5s ease;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--progress-fill);
+  transition: width 0.95s linear;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+/* ── Timezone ── */
+.timezone {
+  margin-top: 18px;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  animation: fade-up 0.6s 0.65s both;
+  transition: color 0.5s ease;
+}
+
+/* ── Keyframes ── */
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Digit flip animation on change ── */
+.digit-display.flip {
+  animation: digit-flip 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes digit-flip {
+  0%   { transform: translateY(0) scaleY(1); }
+  40%  { transform: translateY(-8px) scaleY(0.9); opacity: 0.4; }
+  100% { transform: translateY(0) scaleY(1); opacity: 1; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .clock-wrapper {
+    padding: 36px 24px 32px;
+    border-radius: 24px;
+    width: 95vw;
+  }
+
+  .digit-display {
+    min-width: 90px;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .date-container { flex-direction: column; gap: 4px; }
+  .date-sep { display: none; }
+}
+
+@media (max-width: 380px) {
+  .colon { font-size: 3rem; }
+  .digit-display { min-width: 78px; padding: 10px 10px; }
+}

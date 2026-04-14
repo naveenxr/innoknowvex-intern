@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="A stunning animated digital clock displaying live time and date with dark/light mode toggle." />
+  <title>Animated Digital Clock</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="dark" id="body">
+
+  <!-- Background particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">
+    <span class="toggle-icon" id="toggleIcon">🌙</span>
+  </button>
+
+  <!-- Main Clock Container -->
+  <div class="clock-wrapper">
+
+    <!-- Greeting -->
+    <p class="greeting" id="greeting">Good Evening</p>
+
+    <!-- Date Display -->
+    <div class="date-container" id="dateDisplay">
+      <span class="date-day" id="dayName">Saturday</span>
+      <span class="date-sep">|</span>
+      <span class="date-full" id="fullDate">April 5, 2025</span>
+    </div>
+
+    <!-- Clock Face -->
+    <div class="clock-face">
+      <!-- Hours -->
+      <div class="time-block" id="hourBlock">
+        <div class="digit-display" id="hours">00</div>
+        <div class="label">HOURS</div>
+      </div>
+
+      <div class="colon-separator">
+        <span class="colon" id="colon1">:</span>
+      </div>
+
+      <!-- Minutes -->
+      <div class="time-block" id="minBlock">
+        <div class="digit-display" id="minutes">00</div>
+        <div class="label">MINUTES</div>
+      </div>
+
+      <div class="colon-separator">
+        <span class="colon" id="colon2">:</span>
+      </div>
+
+      <!-- Seconds -->
+      <div class="time-block" id="secBlock">
+        <div class="digit-display" id="seconds">00</div>
+        <div class="label">SECONDS</div>
+      </div>
+    </div>
+
+    <!-- AM/PM Indicator -->
+    <div class="ampm-container">
+      <span class="ampm-badge" id="ampmBadge">PM</span>
+    </div>
+
+    <!-- Progress Bar (seconds) -->
+    <div class="progress-container" title="Second progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Timezone -->
+    <p class="timezone" id="timezone"></p>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
